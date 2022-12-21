@@ -163,13 +163,13 @@ export default function Home() {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              marginBottom: "40px",
+              marginBottom: "60px",
               fontSize: "14px",
             }}
           >
-            <div>🎄 MERRY CRHISTMAS 🎄</div>
-            <div>AND</div>
-            <div>HAPPY NEW YEAR</div>
+            <h1>🎄 MERRY CRHISTMAS 🎄</h1>
+            <h2>AND</h2>
+            <h1>HAPPY NEW YEAR</h1>
           </div>
           <div
             className="tree"
@@ -226,6 +226,10 @@ export default function Home() {
               );
             })}
           </div>
+          <div>{`빈 트리를 눌러 메시지를 작성해주세요.
+          익명으로 저장됩니다.
+          `}</div>
+          <h3 style={{ margin: "50px" }}>메시지는 12월 25일에 공개됩니다 🎅</h3>
           {/* <div className="messages">
               <p>안녕하세요</p>
               <p>안녕하세요</p>
