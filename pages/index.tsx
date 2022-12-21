@@ -1,8 +1,14 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import styled, { keyframes, css } from "styled-components";
+interface ISnowFlake {
+  left: number;
+  top: number;
+  distance: number;
+  duration: number;
+}
 export default function Home() {
-  const boxFade = (props) => {
+  const boxFade = (props: ISnowFlake) => {
     return keyframes`
   0%{
     opacity:1;
@@ -21,7 +27,7 @@ export default function Home() {
     color: white;
     position: fixed;
     font-size: 36px;
-    animation: ${(props) =>
+    animation: ${(props: ISnowFlake) =>
       css`
         ${boxFade(props)} ${props.duration}s linear infinite
       `};
@@ -29,13 +35,13 @@ export default function Home() {
   `;
   const start = 1;
   const end = 30;
-  let treeMap = [];
+  let treeMap: number[][] = [];
   for (let i = 0; i <= end / 2; i++) {
     treeMap.push([]);
   }
   for (let i = start; i < end; i += 2) {
     let temp = "";
-    let mok = parseInt(i / 2) + 1;
+    let mok = Math.floor(i / 2) + 1;
     for (let j = 0; j < (end - i) / 2; j++) {
       temp += " ";
       treeMap[mok].push(0);
@@ -72,7 +78,7 @@ export default function Home() {
     }
   };
   const snowArr = [];
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 50; i++) {
     const left = Math.random() * 1920;
     const top = Math.random() * 200 - 100;
     const duration = Math.random() * 10 + 15;
