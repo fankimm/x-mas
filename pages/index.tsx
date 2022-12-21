@@ -9,7 +9,7 @@ interface ISnowFlake {
   distance: number;
   duration: number;
 }
-const boxFade = (props: ISnowFlake) => {
+const snowAnim = (props: ISnowFlake) => {
   return keyframes`
   0%{
     opacity:1;
@@ -30,21 +30,55 @@ const SnowFlake = styled.div`
   font-size: 36px;
   animation: ${(props: ISnowFlake) =>
     css`
-      ${boxFade(props)} ${props.duration}s linear infinite
+      ${snowAnim(props)} ${props.duration}s linear infinite
     `};
   left: ${(props) => `${props.left}vw`};
 `;
+const Leaf = styled.div`
+  ${(props) => {
+    if (props.children === "*") {
+      return `
+        font-size:50px;
+    width: 10px;
+  height: 20px;
+  padding: 4px;
+  display: flex;
+  color: ${props.color};
+  justify-content: center;
+  align-items: center;`;
+    } else {
+      return `
+    width: 10px;
+  height: 20px;
+  padding: 4px;
+  display: flex;
+  color: ${props.color};
+  justify-content: center;
+  align-items: center;`;
+    }
+  }}
+  &:hover {
+    ${(props) => {
+      if (props.children !== " " && props.children !== "*") {
+        return `  background: rgb(3, 120, 20);
+    border-radius: 10px;
+    cursor: pointer;`;
+      }
+    }}
+  }
+`;
 export default function Home() {
-  const start = 1;
-  const end = 30;
+  const START = 1;
+  const END = 30;
+  const FALKE_AMOUNTS = 30;
   let treeMap: number[][] = [];
-  for (let i = 0; i <= end / 2; i++) {
+  for (let i = 0; i <= END / 2; i++) {
     treeMap.push([]);
   }
-  for (let i = start; i < end; i += 2) {
+  for (let i = START; i < END; i += 2) {
     let temp = "";
     let mok = Math.floor(i / 2) + 1;
-    for (let j = 0; j < (end - i) / 2; j++) {
+    for (let j = 0; j < (END - i) / 2; j++) {
       temp += " ";
       treeMap[mok].push(0);
     }
@@ -80,7 +114,7 @@ export default function Home() {
     }
   };
   const snowArr = [];
-  for (let i = 0; i < 50; i++) {
+  for (let i = 0; i < FALKE_AMOUNTS; i++) {
     const left = Math.random() * 100;
     const top = 10 - Math.random() * 20;
     const duration = Math.random() * 10 + 15;
@@ -115,10 +149,10 @@ export default function Home() {
           );
         })}
         <div className={styles.main}>
+          <div style={{ margin: "30px" }}></div>
           <div
             style={{
               width: "500px",
-              height: "500px",
               borderRadius: "20px",
               padding: "20px",
               color: "white",
@@ -146,7 +180,6 @@ export default function Home() {
               style={{
                 display: "flex",
                 flexDirection: "column",
-                // alignItems: "center",
                 justifyContent: "center",
               }}
             >
@@ -157,36 +190,81 @@ export default function Home() {
                     key={rowKey}
                     style={{
                       display: "flex",
-                      // background: "blue",
                     }}
                   >
                     {row.map((col, idx) => {
                       const colKey = `col_${idx}`;
                       return (
-                        <div
-                          className={styles.treeCol}
-                          key={colKey}
-                          style={{
-                            width: "10px",
-                            height: "20px",
-                            padding: "4px",
-                            display: "flex",
-                            // color: "rgb(0,179,61)",
-                            color: mapColorRender(col),
-                            // background: col !== 0 ? "white" : undefined,
-                            // alignItems: "start",
-                            justifyContent: "center",
-                            alignItems: "center",
-                          }}
-                        >
+                        <Leaf key={colKey} color={mapColorRender(col)}>
                           {mapRender(col)}
-                        </div>
+                        </Leaf>
+                        // <div
+                        //   className={styles.treeCol}
+                        //   key={colKey}
+                        //   style={{
+                        //     width: "10px",
+                        //     height: "20px",
+                        //     padding: "4px",
+                        //     display: "flex",
+                        //     color: mapColorRender(col),
+                        //     justifyContent: "center",
+                        //     alignItems: "center",
+                        //   }}
+                        // >
+                        //   {mapRender(col)}
+                        // </div>
                       );
                     })}
                   </div>
                 );
               })}
             </div>
+            {/* <div className="messages">
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+              <p>안녕하세요</p>
+            </div> */}
           </div>
         </div>
       </NoSsr>

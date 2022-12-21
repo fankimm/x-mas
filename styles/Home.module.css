@@ -3,16 +3,10 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background: rgb(35, 39, 45);
+  overflow: hidden;
+  height: auto;
 }
 /* Enable hover only on non-touch devices */
-
-.treeCol:hover {
-  background: rgb(3, 120, 20);
-  border-radius: 10px;
-  cursor: pointer;
-}
 
 /* Mobile */
 @media (max-width: 700px) {
