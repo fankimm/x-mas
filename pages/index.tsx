@@ -30,6 +30,7 @@ const Leaf = styled.div`
         display: flex;
         color: ${props.color};
         justify-content: center;
+        transition:0.3s all;
         align-items: center;`;
     }
   }}
@@ -45,7 +46,7 @@ const Leaf = styled.div`
 `;
 export default function Home() {
   const START = 1;
-  const END = 40;
+  const END = 38;
   let treeMap: number[][] = [];
   for (let i = 0; i <= END / 2; i++) {
     treeMap.push([]);
@@ -74,6 +75,10 @@ export default function Home() {
     treeMap.push(base);
   }
   const [tree, setTree] = useState(treeMap);
+  const [form, setForm] = useState({
+    msgInput: "",
+  });
+  const [visible, setVisible] = useState(false);
   //test code
   treeMap[7][20] = 4;
   treeMap[7][23] = 5;
@@ -144,6 +149,51 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      {visible ? (
+        <>
+          <div
+            style={{
+              padding: "10px",
+              position: "fixed",
+              top: "10%",
+              left: "calc(50% - 200px)",
+              background: "white",
+              width: "400px",
+              height: "200px",
+              borderRadius: "10px",
+              boxShadow:
+                "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px",
+            }}
+          >
+            모달 테스트
+            <button
+              onClick={() => {
+                setVisible(false);
+              }}
+            >
+              x
+            </button>
+            <input
+              onChange={(e) => {
+                console.log(e.target.value);
+                setForm({
+                  msgInput: e.target.value,
+                });
+              }}
+            ></input>
+            <button
+              onClick={() => {
+                console.log(form);
+                setVisible(false);
+              }}
+            >
+              확인
+            </button>
+          </div>
+        </>
+      ) : (
+        <></>
+      )}
       <div className={styles.main}>
         <div style={{ margin: "30px" }}></div>
         <div
@@ -177,6 +227,7 @@ export default function Home() {
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
+              marginBottom: "80px",
             }}
           >
             {tree.map((row, rowIdx) => {
@@ -196,6 +247,7 @@ export default function Home() {
                         color={mapColorRender(col)}
                         onClick={() => {
                           if (col === 2) {
+                            // setVisible(true);
                             const rn = Math.floor(Math.random() * 4) + 4;
                             let temp = [...tree];
                             temp[rowIdx][colIdx] = rn;
@@ -226,56 +278,42 @@ export default function Home() {
               );
             })}
           </div>
-          <div>{`빈 트리를 눌러 메시지를 작성해주세요.
-          익명으로 저장됩니다.
-          `}</div>
-          <h3 style={{ margin: "50px" }}>메시지는 12월 25일에 공개됩니다 🎅</h3>
-          {/* <div className="messages">
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-              <p>안녕하세요</p>
-            </div> */}
+          <div
+            style={{
+              height: "30vh",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <div>빈 트리를 눌러 메시지를 작성해주세요</div>
+            <div>덕담 좋습니다</div>
+            <div>새해인사 좋습니다</div>
+            <h3 style={{ margin: "50px" }}>
+              메시지는 12월 25일에 공개됩니다 🎅
+            </h3>
+          </div>
+          <div className={styles.footer}>
+            <p>우 와 퍼플아이오 짱</p>
+            <p>이게 뭔가요? 재밌네요</p>
+            <p>다들 새해 복 많이받고 건강하세요</p>
+            <p>WMS 1149</p>
+            <p>안녕하세요</p>
+            <p>hello world</p>
+            <p>나는 쌔삥 보세를 입어도 썌삥</p>
+            <p>작업 영역에서 문제가 발견되지 않았습니다.</p>
+            <p>asdf</p>
+            <p>메시지 작성하기 어렵다</p>
+            <p>크리스마스 행복행복</p>
+            <p>가즈아!!</p>
+            <p>떡볶이 먹고싶다...</p>
+            <p>새해복 많이 받으세요!!!!</p>
+            <p>p</p>
+          </div>
+        </div>
+        <div className="footer" style={{ margin: "80px", color: "white" }}>
+          <div>Copyright © 2022 Kim Jihwan. All rights reserved.</div>
         </div>
       </div>
     </>
