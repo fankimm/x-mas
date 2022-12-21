@@ -14,11 +14,11 @@ const boxFade = (props: ISnowFlake) => {
   0%{
     opacity:1;
     transform: rotate(0deg);
-    top:${props.top}px;
+    top:${props.top}vh;
   }
   100% {
     opacity:0;
-    top:${props.top + props.distance}px;
+    top:${props.top + props.distance}vh;
     transform: rotate(360deg);
 
   }
@@ -32,7 +32,7 @@ const SnowFlake = styled.div`
     css`
       ${boxFade(props)} ${props.duration}s linear infinite
     `};
-  left: ${(props) => `${props.left}px`};
+  left: ${(props) => `${props.left}vw`};
 `;
 export default function Home() {
   const start = 1;
@@ -81,10 +81,10 @@ export default function Home() {
   };
   const snowArr = [];
   for (let i = 0; i < 50; i++) {
-    const left = Math.random() * 1920;
-    const top = Math.random() * 200 - 100;
+    const left = Math.random() * 100;
+    const top = 10 - Math.random() * 20;
     const duration = Math.random() * 10 + 15;
-    const distance = Math.random() * 1000;
+    const distance = Math.random() * 80 + 10;
     snowArr.push({
       left,
       top,
