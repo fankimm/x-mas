@@ -7,9 +7,8 @@ interface ISnowFlake {
   distance: number;
   duration: number;
 }
-export default function Home() {
-  const boxFade = (props: ISnowFlake) => {
-    return keyframes`
+const boxFade = (props: ISnowFlake) => {
+  return keyframes`
   0%{
     opacity:1;
     transform: rotate(0deg);
@@ -22,17 +21,18 @@ export default function Home() {
 
   }
 `;
-  };
-  const SnowFlake = styled.div`
-    color: white;
-    position: fixed;
-    font-size: 36px;
-    animation: ${(props: ISnowFlake) =>
-      css`
-        ${boxFade(props)} ${props.duration}s linear infinite
-      `};
-    left: ${(props) => `${props.left}px`};
-  `;
+};
+const SnowFlake = styled.div`
+  color: white;
+  position: fixed;
+  font-size: 36px;
+  animation: ${(props: ISnowFlake) =>
+    css`
+      ${boxFade(props)} ${props.duration}s linear infinite
+    `};
+  left: ${(props) => `${props.left}px`};
+`;
+export default function Home() {
   const start = 1;
   const end = 30;
   let treeMap: number[][] = [];
