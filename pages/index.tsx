@@ -3,15 +3,13 @@ import styles from "../styles/Home.module.css";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
-const supabaseUrl = "https://twjwxonlsuztanqfexbp.supabase.co";
-const supabaseKey =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR3and4b25sc3V6dGFucWZleGJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzE2Nzg4MDMsImV4cCI6MTk4NzI1NDgwM30.ojWkCb3JJUKik-FQtxfXFqBBwQ2qpj804AhXB3L_peo";
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+const supabaseKey = "asdf";
 const supabase = createClient(supabaseUrl, supabaseKey);
 const getData = async () => {
   const res = await supabase.from("messages").select("*");
   return res;
 };
-console.log(getData());
 const Leaf = styled.div`
   ${(props) => {
     if (props.children === "*") {
@@ -55,6 +53,8 @@ const Leaf = styled.div`
 `;
 export default function Home() {
   useEffect(() => {
+    console.log(process.env.NEXT_PUBLIC_SUPABASE_KEY);
+    console.log(process.env.SUPABASE_KEY);
     getData().then((res) => {
       const { data } = res;
       const temp = [...tree];
@@ -64,15 +64,7 @@ export default function Home() {
       });
       setTree(temp);
     });
-    // const { data } = await getData();
-    // console.log(data);
-    // const temp = [...tree];
-    // data?.forEach((item) => {
-    //   const { rowIdx, colIdx, shape } = item;
-    //   temp[rowIdx][colIdx] = shape;
-    // });
-    // setTree(temp);
-  }, []);
+  });
   const START = 1;
   const END = 38;
   let treeMap: number[][] = [];
