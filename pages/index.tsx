@@ -4,6 +4,10 @@ import styles from "../styles/Home.module.css";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
+interface IMessage {
+  message: string;
+  shape: number;
+}
 const supabaseUrl =
   process.env.NEXT_PUBLIC_SUPABASE_URL ||
   process.env.SUPABASE_URL ||
@@ -14,11 +18,12 @@ const supabaseKey =
   "asdf_key";
 const supabase = createClient(supabaseUrl, supabaseKey);
 const getTreeData = async () => {
-  const res = await supabase.from("tree").select("*");
+  const res = await supabase.from("messages").select("shape,rowIdx,colIdx");
   return res;
 };
 const getMessages = async () => {
-  const res = await supabase.from("messages").select("*");
+  const res = await supabase.from("messages").select("shape,message");
+  console.log(res);
   return res;
 };
 const Leaf = styled.div`
@@ -75,12 +80,18 @@ export default function Home() {
       });
       setTree(temp);
     });
-    if (now >= holiday) {
-      getMessages().then((res) => {
-        const { data } = res;
-        setMessages(data?.map((item) => item.message));
-      });
-    }
+    getMessages().then((res) => {
+      const { data } = res;
+      setMessages(
+        data?.map((item) => {
+          const { message, shape } = item;
+          return {
+            message,
+            shape,
+          };
+        })
+      );
+    });
   };
   useEffect(() => {
     const timer = setInterval(() => {
@@ -123,7 +134,7 @@ export default function Home() {
   const [form, setForm] = useState({
     msgInput: "",
   });
-  const [messages, setMessages] = useState<string[]>();
+  const [messages, setMessages] = useState<IMessage[]>();
   const [visible, setVisible] = useState(false);
   const mapRender = (val: number) => {
     switch (val) {
@@ -292,8 +303,8 @@ export default function Home() {
                                   Math.random() * 1000
                                 )}`,
                                 shape,
-                                rowIdx,
                                 colIdx,
+                                rowIdx,
                               });
                             if (!error) {
                               updateTree();
@@ -309,31 +320,39 @@ export default function Home() {
               );
             })}
           </div>
-          {now < holiday ? (
-            <div
-              style={{
-                height: "30vh",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <div>빈 트리를 눌러 메시지를 작성해주세요</div>
-              <div>덕담 좋습니다</div>
-              <div>새해인사 좋습니다</div>
-              <h3 style={{ margin: "50px" }}>
-                메시지는 12월 25일에 공개됩니다 🎅
-              </h3>
-            </div>
-          ) : (
-            <></>
-          )}
+          <div
+            style={{
+              height: "30vh",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <div>빈 트리를 눌러 메시지를 작성해주세요</div>
+            <div>덕담 좋습니다</div>
+            <div>새해인사 좋습니다</div>
+            <h3 style={{ margin: "50px" }}>
+              메시지는 12월 25일에 공개됩니다 🎅
+            </h3>
+          </div>
+
           <div className={styles.messages}>
-            {now >= holiday &&
-              messages?.map((item, messageIdx) => {
-                return <p key={`message_${messageIdx}`}>{item}</p>;
-              })}
+            {messages?.map((item, messageIdx) => {
+              return (
+                <p key={`message_${messageIdx}`}>
+                  <span
+                    style={{
+                      color: mapColorRender(item.shape),
+                      marginRight: "10px",
+                    }}
+                  >
+                    {mapRender(item.shape)}
+                  </span>
+                  <span>{item.message}</span>
+                </p>
+              );
+            })}
             {/* <p>우 와 퍼플아이오 짱</p>
             <p>이게 뭔가요? 재밌네요</p>
             <p>다들 새해 복 많이받고 건강하세요</p>
