@@ -13,7 +13,11 @@ const supabaseKey =
   process.env.SUPABASE_KEY ||
   "asdf_key";
 const supabase = createClient(supabaseUrl, supabaseKey);
-const getData = async () => {
+const getTreeData = async () => {
+  const res = await supabase.from("tree").select("*");
+  return res;
+};
+const getMessages = async () => {
   const res = await supabase.from("messages").select("*");
   return res;
 };
@@ -59,18 +63,32 @@ const Leaf = styled.div`
   }
 `;
 export default function Home() {
-  useEffect(() => {
-    getData().then((res) => {
+  const now = new Date();
+  const holiday = new Date("2022-12-25");
+  const updateTree = () => {
+    getTreeData().then((res) => {
       const { data } = res;
-      console.log(data);
       const temp = [...tree];
-      setMessages(data?.map((item) => item.message));
       data?.forEach((item) => {
         const { rowIdx, colIdx, shape } = item;
         temp[rowIdx][colIdx] = shape;
       });
       setTree(temp);
     });
+    if (now >= holiday) {
+      getMessages().then((res) => {
+        const { data } = res;
+        setMessages(data?.map((item) => item.message));
+      });
+    }
+  };
+  useEffect(() => {
+    const timer = setInterval(() => {
+      updateTree();
+    }, 4000);
+    return () => {
+      clearTimeout(timer);
+    };
   }, []);
   const START = 1;
   const END = 38;
@@ -107,14 +125,6 @@ export default function Home() {
   });
   const [messages, setMessages] = useState<string[]>();
   const [visible, setVisible] = useState(false);
-  // //test code
-  // treeMap[7][20] = 4;
-  // treeMap[7][23] = 5;
-  // treeMap[9][17] = 5;
-  // treeMap[11][20] = 6;
-  // treeMap[14][13] = 7;
-  // //testcode
-
   const mapRender = (val: number) => {
     switch (val) {
       case 0:
@@ -274,20 +284,19 @@ export default function Home() {
                         color={mapColorRender(col)}
                         onClick={async () => {
                           if (col === 2) {
-                            // setVisible(true);
                             const shape = Math.floor(Math.random() * 4) + 4;
                             const { error } = await supabase
                               .from("messages")
                               .insert({
-                                message: "test2",
+                                message: `test_${Math.floor(
+                                  Math.random() * 1000
+                                )}`,
                                 shape,
                                 rowIdx,
                                 colIdx,
                               });
                             if (!error) {
-                              let temp = [...tree];
-                              temp[rowIdx][colIdx] = shape;
-                              setTree(temp);
+                              updateTree();
                             }
                           }
                         }}
@@ -300,26 +309,31 @@ export default function Home() {
               );
             })}
           </div>
-          <div
-            style={{
-              height: "30vh",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <div>빈 트리를 눌러 메시지를 작성해주세요</div>
-            <div>덕담 좋습니다</div>
-            <div>새해인사 좋습니다</div>
-            <h3 style={{ margin: "50px" }}>
-              메시지는 12월 25일에 공개됩니다 🎅
-            </h3>
-          </div>
-          <div className={styles.footer}>
-            {messages?.map((item, messageIdx) => {
-              return <p key={`message_${messageIdx}`}>{item}</p>;
-            })}
+          {now < holiday ? (
+            <div
+              style={{
+                height: "30vh",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <div>빈 트리를 눌러 메시지를 작성해주세요</div>
+              <div>덕담 좋습니다</div>
+              <div>새해인사 좋습니다</div>
+              <h3 style={{ margin: "50px" }}>
+                메시지는 12월 25일에 공개됩니다 🎅
+              </h3>
+            </div>
+          ) : (
+            <></>
+          )}
+          <div className={styles.messages}>
+            {now >= holiday &&
+              messages?.map((item, messageIdx) => {
+                return <p key={`message_${messageIdx}`}>{item}</p>;
+              })}
             {/* <p>우 와 퍼플아이오 짱</p>
             <p>이게 뭔가요? 재밌네요</p>
             <p>다들 새해 복 많이받고 건강하세요</p>
