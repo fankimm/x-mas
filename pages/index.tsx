@@ -2,11 +2,18 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 interface IMessage {
   message: string;
   shape: number;
+}
+interface ICurrentLeaf {
+  colIdx: number;
+  rowIdx: number;
+}
+interface IForm {
+  input: string;
 }
 const supabaseUrl =
   process.env.NEXT_PUBLIC_SUPABASE_URL ||
@@ -23,9 +30,19 @@ const getTreeData = async () => {
 };
 const getMessages = async () => {
   const res = await supabase.from("messages").select("shape,message");
-  console.log(res);
   return res;
 };
+const Input = styled.div`
+  ${(props: { visible: boolean }) => {
+    if (!props.visible) {
+      return `display:none`;
+    } else {
+      return `
+        display:flex;
+      `;
+    }
+  }}
+`;
 const Leaf = styled.div`
   ${(props) => {
     if (props.children === "*") {
@@ -70,6 +87,20 @@ const Leaf = styled.div`
 export default function Home() {
   const now = new Date();
   const holiday = new Date("2022-12-25");
+  const postMessage = async () => {
+    const shape = Math.floor(Math.random() * 4) + 4;
+    const { error } = await supabase.from("messages").insert({
+      message: form?.input,
+      shape,
+      colIdx: currentLeafPos?.colIdx,
+      rowIdx: currentLeafPos?.rowIdx,
+    });
+    if (!error) {
+      updateTree();
+    }
+    setForm({ input: "" });
+    setInputVisible(false);
+  };
   const updateTree = () => {
     getTreeData().then((res) => {
       const { data } = res;
@@ -130,12 +161,12 @@ export default function Home() {
   for (let i = 0; i < 4; i++) {
     treeMap.push(base);
   }
+  const inputRef = useRef<HTMLInputElement>(null);
   const [tree, setTree] = useState(treeMap);
-  const [form, setForm] = useState({
-    msgInput: "",
-  });
+  const [inputVisible, setInputVisible] = useState(false);
+  const [currentLeafPos, setCurrentLeafPos] = useState<ICurrentLeaf>();
+  const [form, setForm] = useState<IForm>();
   const [messages, setMessages] = useState<IMessage[]>();
-  const [visible, setVisible] = useState(false);
   const mapRender = (val: number) => {
     switch (val) {
       case 0:
@@ -197,51 +228,6 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {visible ? (
-        <>
-          <div
-            style={{
-              padding: "10px",
-              position: "fixed",
-              top: "10%",
-              left: "calc(50% - 200px)",
-              background: "white",
-              width: "400px",
-              height: "200px",
-              borderRadius: "10px",
-              boxShadow:
-                "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px",
-            }}
-          >
-            모달 테스트
-            <button
-              onClick={() => {
-                setVisible(false);
-              }}
-            >
-              x
-            </button>
-            <input
-              onChange={(e) => {
-                console.log(e.target.value);
-                setForm({
-                  msgInput: e.target.value,
-                });
-              }}
-            ></input>
-            <button
-              onClick={() => {
-                console.log(form);
-                setVisible(false);
-              }}
-            >
-              확인
-            </button>
-          </div>
-        </>
-      ) : (
-        <></>
-      )}
       <div className={styles.main}>
         <div style={{ margin: "30px" }}></div>
         <div
@@ -295,20 +281,12 @@ export default function Home() {
                         color={mapColorRender(col)}
                         onClick={async () => {
                           if (col === 2) {
-                            const shape = Math.floor(Math.random() * 4) + 4;
-                            const { error } = await supabase
-                              .from("messages")
-                              .insert({
-                                message: `test_${Math.floor(
-                                  Math.random() * 1000
-                                )}`,
-                                shape,
-                                colIdx,
-                                rowIdx,
-                              });
-                            if (!error) {
-                              updateTree();
-                            }
+                            setInputVisible(true);
+                            setCurrentLeafPos({ rowIdx, colIdx });
+                            inputRef &&
+                              inputRef.current &&
+                              inputRef.current.focus();
+                            return;
                           }
                         }}
                       >
@@ -329,6 +307,33 @@ export default function Home() {
               alignItems: "center",
             }}
           >
+            <Input
+              // className={styles.inputBox}
+              visible={inputVisible}
+            >
+              <input
+                value={form?.input || ""}
+                onChange={(e) => {
+                  setForm({ input: e.target.value });
+                }}
+                // onKeyUp={(e) => {
+                //   console.log(e);
+                //   if (e.code === "Enter" && e.nativeEvent.composed) {
+                //     postMessage();
+                //   }
+                // }}
+                ref={inputRef}
+                style={{ marginRight: "10px" }}
+              ></input>
+              <button
+                style={{ fontSize: "16px" }}
+                onClick={() => {
+                  postMessage();
+                }}
+              >
+                🛷
+              </button>
+            </Input>
             <div>빈 트리를 눌러 메시지를 작성해주세요</div>
             <div>덕담 좋습니다</div>
             <div>새해인사 좋습니다</div>

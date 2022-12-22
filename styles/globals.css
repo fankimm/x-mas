@@ -1,9 +1,11 @@
 :root {
   --max-width: 1100px;
+  --default-background: rgb(17, 18, 20);
+  --light-background: rgb(41, 44, 49);
 }
 body {
   height: 100vh;
-  background: rgb(35, 39, 45);
+  background: var(--default-background);
   font-size: 12px;
 }
 * {
@@ -16,26 +18,38 @@ body {
 
 p {
   border-radius: 5px;
-  background: rgb(70, 64, 60);
+  background: var(--light-background);
   padding: 4px;
   margin: 4px;
 }
 
 button {
-  background: white;
+  background-color: var(--default-background);
   border: 0;
   padding: 4px;
-  font-size: large;
+  font-size: 16px;
   border-radius: 5px;
   transition: all 0.3s;
 }
 
 button:hover {
+  font-size: 100px;
   cursor: pointer;
-  color: rgb(106, 106, 106);
+  /* color: rgb(106, 106, 106); */
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+input {
+  border: none;
+  padding: 0 8px;
+  border-radius: 5px;
+  background-color: var(--light-background);
+  color: white;
+}
+
+/* input:disabled {
+  
+} */
+
+input:focus {
+  outline: none;
 }
