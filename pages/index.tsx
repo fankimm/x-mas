@@ -59,9 +59,6 @@ const Leaf = styled.div`
 `;
 export default function Home() {
   useEffect(() => {
-    console.log(process.env.NEXT_PUBLIC_SUPABASE_KEY);
-    console.log(process.env.SUPABASE_KEY);
-    console.log("TEST_KEY", process.env.TEST_KEY);
     getData().then((res) => {
       const { data } = res;
       const temp = [...tree];
