@@ -26,6 +26,8 @@ concurrency:
 jobs:
   # Build job
   build:
+    env:
+      TEST_KEY: ${{ secrets.TEST_KEY }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -74,8 +76,6 @@ jobs:
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Build with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
-        env:
-          SUPABASE_URL: ${{ secrets.TEST_KEY }}
       - name: Static HTML export with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} next export
       - name: Upload artifact
