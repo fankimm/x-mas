@@ -3,7 +3,8 @@ import styles from "../styles/Home.module.css";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+const supabaseUrl =
+  process.env.NEXT_PUBLIC_SUPABASE_URL || "https://naver.com.co";
 const supabaseKey = "asdf";
 const supabase = createClient(supabaseUrl, supabaseKey);
 const getData = async () => {
