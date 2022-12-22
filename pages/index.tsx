@@ -4,8 +4,13 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 const supabaseUrl =
-  process.env.NEXT_PUBLIC_SUPABASE_URL || "https://naver.com.co";
-const supabaseKey = "asdf";
+  process.env.NEXT_PUBLIC_SUPABASE_URL ||
+  process.env.SUPABASE_URL ||
+  "asdf_url";
+const supabaseKey =
+  process.env.PUBLIC_NEXT_SUPABASE_KEY ||
+  process.env.SUPABASE_KEY ||
+  "asdf_key";
 const supabase = createClient(supabaseUrl, supabaseKey);
 const getData = async () => {
   const res = await supabase.from("messages").select("*");
