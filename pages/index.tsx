@@ -1,8 +1,17 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import styled, { keyframes, css } from "styled-components";
-import { useState } from "react";
-
+import styled from "styled-components";
+import { useEffect, useState } from "react";
+import { createClient } from "@supabase/supabase-js";
+const supabaseUrl = "https://twjwxonlsuztanqfexbp.supabase.co";
+const supabaseKey =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR3and4b25sc3V6dGFucWZleGJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzE2Nzg4MDMsImV4cCI6MTk4NzI1NDgwM30.ojWkCb3JJUKik-FQtxfXFqBBwQ2qpj804AhXB3L_peo";
+const supabase = createClient(supabaseUrl, supabaseKey);
+const getData = async () => {
+  const res = await supabase.from("messages").select("*");
+  return res;
+};
+console.log(getData());
 const Leaf = styled.div`
   ${(props) => {
     if (props.children === "*") {
@@ -45,6 +54,25 @@ const Leaf = styled.div`
   }
 `;
 export default function Home() {
+  useEffect(() => {
+    getData().then((res) => {
+      const { data } = res;
+      const temp = [...tree];
+      data?.forEach((item) => {
+        const { rowIdx, colIdx, shape } = item;
+        temp[rowIdx][colIdx] = shape;
+      });
+      setTree(temp);
+    });
+    // const { data } = await getData();
+    // console.log(data);
+    // const temp = [...tree];
+    // data?.forEach((item) => {
+    //   const { rowIdx, colIdx, shape } = item;
+    //   temp[rowIdx][colIdx] = shape;
+    // });
+    // setTree(temp);
+  }, []);
   const START = 1;
   const END = 38;
   let treeMap: number[][] = [];
@@ -79,13 +107,13 @@ export default function Home() {
     msgInput: "",
   });
   const [visible, setVisible] = useState(false);
-  //test code
-  treeMap[7][20] = 4;
-  treeMap[7][23] = 5;
-  treeMap[9][17] = 5;
-  treeMap[11][20] = 6;
-  treeMap[14][13] = 7;
-  //testcode
+  // //test code
+  // treeMap[7][20] = 4;
+  // treeMap[7][23] = 5;
+  // treeMap[9][17] = 5;
+  // treeMap[11][20] = 6;
+  // treeMap[14][13] = 7;
+  // //testcode
 
   const mapRender = (val: number) => {
     switch (val) {
@@ -140,7 +168,6 @@ export default function Home() {
         return color;
     }
   };
-
   return (
     <>
       <Head>
@@ -245,13 +272,23 @@ export default function Home() {
                       <Leaf
                         key={colKey}
                         color={mapColorRender(col)}
-                        onClick={() => {
+                        onClick={async () => {
                           if (col === 2) {
                             // setVisible(true);
-                            const rn = Math.floor(Math.random() * 4) + 4;
-                            let temp = [...tree];
-                            temp[rowIdx][colIdx] = rn;
-                            setTree(temp);
+                            const shape = Math.floor(Math.random() * 4) + 4;
+                            const { error } = await supabase
+                              .from("messages")
+                              .insert({
+                                message: "test2",
+                                shape,
+                                rowIdx,
+                                colIdx,
+                              });
+                            if (!error) {
+                              let temp = [...tree];
+                              temp[rowIdx][colIdx] = shape;
+                              setTree(temp);
+                            }
                           }
                         }}
                       >
