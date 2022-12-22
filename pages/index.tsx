@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import styled from "styled-components";
@@ -8,7 +9,7 @@ const supabaseUrl =
   process.env.SUPABASE_URL ||
   "asdf_url";
 const supabaseKey =
-  process.env.PUBLIC_NEXT_SUPABASE_KEY ||
+  process.env.NEXT_PUBLIC_SUPABASE_KEY ||
   process.env.SUPABASE_KEY ||
   "asdf_key";
 const supabase = createClient(supabaseUrl, supabaseKey);
@@ -61,14 +62,16 @@ export default function Home() {
   useEffect(() => {
     getData().then((res) => {
       const { data } = res;
+      console.log(data);
       const temp = [...tree];
+      setMessages(data?.map((item) => item.message));
       data?.forEach((item) => {
         const { rowIdx, colIdx, shape } = item;
         temp[rowIdx][colIdx] = shape;
       });
       setTree(temp);
     });
-  });
+  }, []);
   const START = 1;
   const END = 38;
   let treeMap: number[][] = [];
@@ -102,6 +105,7 @@ export default function Home() {
   const [form, setForm] = useState({
     msgInput: "",
   });
+  const [messages, setMessages] = useState<string[]>();
   const [visible, setVisible] = useState(false);
   // //test code
   // treeMap[7][20] = 4;
@@ -290,21 +294,6 @@ export default function Home() {
                       >
                         {mapRender(col)}
                       </Leaf>
-                      // <div
-                      //   className={styles.treeCol}
-                      //   key={colKey}
-                      //   style={{
-                      //     width: "10px",
-                      //     height: "20px",
-                      //     padding: "4px",
-                      //     display: "flex",
-                      //     color: mapColorRender(col),
-                      //     justifyContent: "center",
-                      //     alignItems: "center",
-                      //   }}
-                      // >
-                      //   {mapRender(col)}
-                      // </div>
                     );
                   })}
                 </div>
@@ -328,7 +317,10 @@ export default function Home() {
             </h3>
           </div>
           <div className={styles.footer}>
-            <p>우 와 퍼플아이오 짱</p>
+            {messages?.map((item, messageIdx) => {
+              return <p key={`message_${messageIdx}`}>{item}</p>;
+            })}
+            {/* <p>우 와 퍼플아이오 짱</p>
             <p>이게 뭔가요? 재밌네요</p>
             <p>다들 새해 복 많이받고 건강하세요</p>
             <p>WMS 1149</p>
@@ -342,7 +334,7 @@ export default function Home() {
             <p>가즈아!!</p>
             <p>떡볶이 먹고싶다...</p>
             <p>새해복 많이 받으세요!!!!</p>
-            <p>p</p>
+            <p>p</p> */}
           </div>
         </div>
         <div className="footer" style={{ margin: "80px", color: "white" }}>
