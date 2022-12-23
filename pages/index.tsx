@@ -125,12 +125,7 @@ export default function Home() {
     });
   };
   useEffect(() => {
-    const timer = setInterval(() => {
-      updateTree();
-    }, 4000);
-    return () => {
-      clearTimeout(timer);
-    };
+    updateTree();
   }, []);
   const START = 1;
   const END = 38;
@@ -328,7 +323,9 @@ export default function Home() {
               <button
                 style={{ fontSize: "16px" }}
                 onClick={() => {
-                  postMessage();
+                  if (form?.input) {
+                    postMessage();
+                  }
                 }}
               >
                 🛷
