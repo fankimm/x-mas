@@ -302,7 +302,6 @@ export default function Home() {
           </div>
           <div
             style={{
-              height: "30vh",
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
