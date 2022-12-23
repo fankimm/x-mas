@@ -237,7 +237,7 @@ export default function Home() {
             width: "500px",
             borderRadius: "20px",
             padding: "20px",
-            color: "white",
+            // color: "white",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -330,15 +330,25 @@ export default function Home() {
               </button>
             </Input>
             {now < holiday && (
-              <>
+              <div
+                style={{
+                  fontSize: "12px",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  // alignContent: "center",
+                  justifyContent: "space-between",
+                  height: "300px",
+                }}
+              >
                 <div>빈 트리를 눌러 메시지를 작성해주세요</div>
                 <div>덕담 좋습니다</div>
                 <div>새해인사 좋습니다</div>
                 <div>고마운 분들께 감사 인사를 전해요</div>
-                <h3 style={{ margin: "50px" }}>
+                <h3 style={{ margin: "70px" }}>
                   메시지는 12월 25일에 공개됩니다 🎅
                 </h3>
-              </>
+              </div>
             )}
           </div>
           {now >= holiday && (
@@ -364,9 +374,9 @@ export default function Home() {
             </>
           )}
         </div>
-        <div className="footer" style={{ margin: "80px", color: "white" }}>
-          <div>Copyright © 2022 Kim Jihwan. All rights reserved.</div>
-        </div>
+        <footer style={{ marginBottom: "40px" }}>
+          Copyright © 2022 Kim Jihwan. All rights reserved.
+        </footer>
       </div>
     </>
   );

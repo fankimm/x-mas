@@ -7,6 +7,7 @@ h1 {
   font-size: xx-large;
 }
 body {
+  color: #fafafa;
   height: 100vh;
   background: var(--default-background);
   font-size: 18px;
@@ -26,6 +27,10 @@ p {
   margin: 4px;
 }
 
+footer {
+  font-size: 12px;
+}
+
 button {
   background-color: var(--default-background);
   border: 0;
@@ -38,7 +43,6 @@ button {
 button:hover {
   font-size: 100px;
   cursor: pointer;
-  /* color: rgb(106, 106, 106); */
 }
 
 input {
@@ -48,10 +52,6 @@ input {
   background-color: var(--light-background);
   color: white;
 }
-
-/* input:disabled {
-  
-} */
 
 input:focus {
   outline: none;
