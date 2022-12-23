@@ -336,9 +336,7 @@ export default function Home() {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
-                  // alignContent: "center",
                   justifyContent: "space-between",
-                  height: "300px",
                 }}
               >
                 <div>빈 트리를 눌러 메시지를 작성해주세요</div>
