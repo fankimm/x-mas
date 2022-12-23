@@ -126,6 +126,13 @@ export default function Home() {
   };
   useEffect(() => {
     updateTree();
+    const colorChangeTimer = setInterval(() => {
+      const temp = [...tree];
+      setTree(temp);
+    }, 2000);
+    return () => {
+      clearInterval(colorChangeTimer);
+    };
   }, []);
   const START = 1;
   const END = 38;
@@ -302,21 +309,12 @@ export default function Home() {
               alignItems: "center",
             }}
           >
-            <Input
-              // className={styles.inputBox}
-              visible={inputVisible}
-            >
+            <Input visible={inputVisible}>
               <input
-                value={form?.input || ""}
+                // value={form?.input || ""}
                 onChange={(e) => {
                   setForm({ input: e.target.value });
                 }}
-                // onKeyUp={(e) => {
-                //   console.log(e);
-                //   if (e.code === "Enter" && e.nativeEvent.composed) {
-                //     postMessage();
-                //   }
-                // }}
                 ref={inputRef}
                 style={{ marginRight: "10px" }}
               ></input>
@@ -334,6 +332,7 @@ export default function Home() {
             <div>빈 트리를 눌러 메시지를 작성해주세요</div>
             <div>덕담 좋습니다</div>
             <div>새해인사 좋습니다</div>
+            <div>고마운 분들께 감사 인사를 전해요</div>
             <h3 style={{ margin: "50px" }}>
               메시지는 12월 25일에 공개됩니다 🎅
             </h3>
@@ -355,21 +354,6 @@ export default function Home() {
                 </p>
               );
             })}
-            {/* <p>우 와 퍼플아이오 짱</p>
-            <p>이게 뭔가요? 재밌네요</p>
-            <p>다들 새해 복 많이받고 건강하세요</p>
-            <p>WMS 1149</p>
-            <p>안녕하세요</p>
-            <p>hello world</p>
-            <p>나는 쌔삥 보세를 입어도 썌삥</p>
-            <p>작업 영역에서 문제가 발견되지 않았습니다.</p>
-            <p>asdf</p>
-            <p>메시지 작성하기 어렵다</p>
-            <p>크리스마스 행복행복</p>
-            <p>가즈아!!</p>
-            <p>떡볶이 먹고싶다...</p>
-            <p>새해복 많이 받으세요!!!!</p>
-            <p>p</p> */}
           </div>
         </div>
         <div className="footer" style={{ margin: "80px", color: "white" }}>
