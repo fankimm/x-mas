@@ -253,7 +253,7 @@ export default function Home() {
               fontSize: "14px",
             }}
           >
-            <h1>🎄 MERRY CRHISTMAS 🎄</h1>
+            <h1>🎄 MERRY CHRISTMAS 🎄</h1>
             <h2>AND</h2>
             <h1>HAPPY NEW YEAR</h1>
           </div>
